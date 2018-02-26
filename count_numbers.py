@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-numberDict = { 
+numbersDict = { 
         0 : "zero",
         1 : "one",
         2 : "two",
@@ -31,27 +31,42 @@ numberDict = {
         90 : "ninety"
         }
 
-
 def numbers(num):
+
     letters = ""
+
     if 0 < num <= 20:
-        letters += numberDict[num]
-    elif 21 < num <= 99:
-        val_1 = num%10 # 85%10 = 5
-        val_2 = (int(num/10))*10 # 85/10 = 8*10
-        letters += numberDict[val_1]+numberDict[val_2]
-    else:
-        if 100 < num <= 120:
-            letters += numberDict[num/100]+ "hundredand" + numberDict[num%100]
+        letters += numbersDict[num]
+
+    if 21 <= num <= 99:
+        a,b = divmod(num, 10)
+        if b == 0:
+            letters += numbersDict[a*10]
         else:
-            #val_3 = num%10 #135%10 = 5
-            val_4 = (int((num%100)/10))*10 # (int((998%100)/10))*10
-            letters += numberDict[int(num/100)]+"hundredand"+numberDict[val_4]+numberDict[num%10]
+            letters += numbersDict[a*10] + numbersDict[b]
+
+    if 100 <= num <= 999:
+        if num % 100 == 0:
+            letters += numbersDict[int(num / 100)] + "hundred"
+        else:
+            digit = int(num / 100)
+            num = num - digit * 100
+            if 0 < num <= 20:
+                letters += numbersDict[digit] + "hundredand" + numbersDict[num]
+            if 21 <= num <= 99:
+                a,b = divmod(num, 10)
+                if b == 0:
+                    letters += numbersDict[digit] + "hundredand" + numbersDict[a*10]
+                else:
+                    letters += numbersDict[digit] + "hundredand" + numbersDict[a*10] + numbersDict[b]
+    if num == 1000:
+        letters += "onethousand"
+
     count = len(letters)
     return count
 
 sum=0
-for i in range(1,101):
+for i in range(1,1001):
     sum+= numbers(i)
     
 print("sum "+str(sum))
